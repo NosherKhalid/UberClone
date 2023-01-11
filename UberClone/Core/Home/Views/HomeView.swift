@@ -8,13 +8,22 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State var shouldShowLocationSearchView = false
+    
     var body: some View {
         ZStack(alignment: .top) {
             UberMapViewRepresentable()
                 .ignoresSafeArea()
-            LocationSearchActivationView()
-                .padding(.top, 72)
-            MapViewActionButton()
+            if shouldShowLocationSearchView {
+                LocationSearchView()
+            } else {
+                LocationSearchActivationView()
+                    .padding(.top, 72)
+                    .onTapGesture {
+                        shouldShowLocationSearchView.toggle()
+                    }
+            }
+            MapViewActionButton(shouldShowLocationView: $shouldShowLocationSearchView)
                 .padding(.leading)
                 .padding(.top, 4)
         }

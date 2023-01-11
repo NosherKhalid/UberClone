@@ -12,6 +12,8 @@ import SwiftUI
 class LocationSearchViewModel: NSObject, ObservableObject {
     
     @Published var searchList = [MKLocalSearchCompletion]()
+    @Published var selectedLocation: String?
+    
     var searchCompleter = MKLocalSearchCompleter()
     var queryFragment: String = "" {
         didSet {
@@ -24,6 +26,11 @@ class LocationSearchViewModel: NSObject, ObservableObject {
         super.init()
         self.searchCompleter.delegate = self
         self.searchCompleter.queryFragment = queryFragment
+    }
+    
+    func selectLocation(location: String){
+        self.selectedLocation = location
+        debugPrint("Selected Location is: \(String(describing: self.selectedLocation))")
     }
 }
 

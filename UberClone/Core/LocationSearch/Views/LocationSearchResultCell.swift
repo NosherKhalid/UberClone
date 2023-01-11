@@ -27,15 +27,12 @@ struct LocationSearchResultCell: View {
             }
             Spacer()
         }
-        .onTapGesture {
-            
-        }
         .padding(.horizontal)
     }
 }
 
 struct LocationSearchResultCell_Previews: PreviewProvider {
     static var previews: some View {
-        LocationSearchResultCell(shouldShowHomeView: .constant(false), title: "Starbucks Coffee", subtitle: "123 Main St")
+        LocationSearchResultCell(title: "Starbucks Coffee", subtitle: "123 Main St")
     }
 }

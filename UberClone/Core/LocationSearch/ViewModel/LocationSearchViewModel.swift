@@ -12,12 +12,12 @@ import SwiftUI
 class LocationSearchViewModel: NSObject, ObservableObject {
     
     @Published var searchList = [MKLocalSearchCompletion]()
-    @Published var selectedLocation: String?
+    @Published var coordinate: CLLocationCoordinate2D?
     
     var searchCompleter = MKLocalSearchCompleter()
     var queryFragment: String = "" {
         didSet {
-            debugPrint("Query fragment is: \(queryFragment)")
+//            debugPrint("Query fragment is: \(queryFragment)")
             self.searchCompleter.queryFragment = queryFragment
         }
     }
@@ -28,9 +28,25 @@ class LocationSearchViewModel: NSObject, ObservableObject {
         self.searchCompleter.queryFragment = queryFragment
     }
     
-    func selectLocation(location: String){
-        self.selectedLocation = location
-        debugPrint("Selected Location is: \(String(describing: self.selectedLocation))")
+    func selectLocation(localSearch: MKLocalSearchCompletion){
+//        self.selectedLocation = location
+        searchLocation(forLocalSearchCompletion: localSearch) { response, error in
+            if let error {
+                debugPrint("Search Location failed with error \(error.localizedDescription)")
+                return
+            }
+            
+            guard let mapItem = response?.mapItems.first else {return}
+            self.coordinate =  mapItem.placemark.coordinate
+            debugPrint("Location Coordinate: \(String(describing: self.coordinate))")
+        }
+    }
+    
+    func searchLocation(forLocalSearchCompletion localSearch: MKLocalSearchCompletion, completion: @escaping MKLocalSearch.CompletionHandler){
+        let searchRequest = MKLocalSearch.Request()
+        searchRequest.naturalLanguageQuery = localSearch.title.appending(localSearch.subtitle)
+        let search = MKLocalSearch(request: searchRequest)
+        search.start(completionHandler: completion)
     }
 }
 

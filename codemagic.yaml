@@ -1,0 +1,5 @@
+workflows:
+  uber clone workflow:
+    name: CICD Added
+    scripts:
+        - echo "Uber Clone Commit with CICD Configuration!"
